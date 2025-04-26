@@ -11,6 +11,8 @@ import { useJsonRpc } from "@/hooks/useJsonRpc";
 import { useHidStore, useRTCStore, useUiStore } from "@/hooks/stores";
 import { chars, keys, modifiers } from "@/keyboardMappings";
 import notifications from "@/notifications";
+import { SettingsItem } from "@routes/devices.$id.settings";
+import Checkbox from "@components/Checkbox";
 
 const hidKeyboardPayload = (keys: number[], modifier: number) => {
   return { keys, modifier };
@@ -32,6 +34,12 @@ export default function PasteModal() {
     setDisableVideoFocusTrap(false);
     setInvalidChars([]);
   }, [setDisableVideoFocusTrap, setPasteMode]);
+
+  const togglepassword = useCallback(() {
+           const textarea = $
+           
+
+  });
 
   const onConfirmPaste = useCallback(async () => {
     setPasteMode(false);
@@ -143,6 +151,14 @@ export default function PasteModal() {
             animationDelay: "0.2s",
           }}
         >
+          <SettingsItem
+           title="Password?"
+           />
+           <Checkbox
+            defaultChecked=false
+            onChange {e => togglepassword }
+            />
+          </SettingsItem>
           <Button
             size="SM"
             theme="blank"
