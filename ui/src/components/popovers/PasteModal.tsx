@@ -11,7 +11,6 @@ import { useJsonRpc } from "@/hooks/useJsonRpc";
 import { useHidStore, useRTCStore, useUiStore } from "@/hooks/stores";
 import { chars, keys, modifiers } from "@/keyboardMappings";
 import notifications from "@/notifications";
-import { SettingsItem } from "@routes/devices.$id.settings";
 import Checkbox from "@components/Checkbox";
 
 const hidKeyboardPayload = (keys: number[], modifier: number) => {
@@ -35,11 +34,40 @@ export default function PasteModal() {
     setInvalidChars([]);
   }, [setDisableVideoFocusTrap, setPasteMode]);
 
-  const togglepassword = useCallback(() {
-           const textarea = $
-           
+  const onTogglePassword = () => {
+    if(TextAreaRef.current !== null) return;
 
-  });
+    var textarea = TextAreaRef.current as HTMLTextAreaElement;
+
+    if(textarea.nodeName.toLowerCase() == "textarea") {
+      var passfield = document.createElement("input") as HTMLInputElement;
+      passfield.setAttribute("type", "password");
+      
+      if(textarea.hasAttribute("name")) {
+        passfield.setAttribute("name", textarea.getAttribute("name"));
+      }
+
+      if(textarea.hasAttribute("id")) {
+        passfield.setAttribute("id", textarea.getAttribute("id"));
+      }
+      
+      textarea.parentNode?.replaceChild(passfield, textarea);
+    } else {
+      var text = document.createElement("textarea") as HTMLTextAreaElement;
+      if(textarea.hasAttribute("type"))
+        textarea.removeAttribute("type");
+
+        if(textarea.hasAttribute("name")) {
+          text.setAttribute("name", textarea.getAttribute("name"));
+        }
+  
+        if(textarea.hasAttribute("id")) {
+          text.setAttribute("id", textarea.getAttribute("id"));
+        }
+
+        textarea.parentNode?.replaceChild(text, textarea);
+    }
+  };
 
   const onConfirmPaste = useCallback(async () => {
     setPasteMode(false);
@@ -151,14 +179,12 @@ export default function PasteModal() {
             animationDelay: "0.2s",
           }}
         >
-          <SettingsItem
-           title="Password?"
-           />
-           <Checkbox
-            defaultChecked=false
-            onChange {e => togglepassword }
-            />
-          </SettingsItem>
+          <Checkbox
+           defaultChecked={false}
+            onChange={() => {
+              onTogglePassword();
+            }}
+          />
           <Button
             size="SM"
             theme="blank"
